@@ -1,7 +1,7 @@
 ####
 # Author: Srikaanth Penugonda
 # Version 2.0
-# python tableau_update_pwd.py <server_address> <username> <password> <DB Environment Name> <NEW DB PASSWORD>
+# python tableau_update_pwd.py <server_address> <username> <password> <DB Environment Name> <NEW DB PASSWORD> <site_name>
 # When running the script, it will prompt for the following:
 # 'Password': Enter password for the user to log in as.
 ####
@@ -175,17 +175,18 @@ def get_workbook_connection_id(server, auth_token, site_id, workbook_id):
 
 
 def main():
-    if len(sys.argv) != 6:
-        error = "5 arguments needed (Env VIP URl, ENV admin user(tabstgadmin/tabproadmin etc), ENV admin password , DB Environment Name , NEW DB PASSWORD)"
+    if len(sys.argv) != 7:
+        error = "6 arguments needed (Env VIP URl, ENV admin user(tabstgadmin/tabproadmin etc), ENV admin password , DB Environment Name , NEW DB PASSWORD, tableau site name)"
         raise UserDefinedFieldError(error)
     server = sys.argv[1]
     username = sys.argv[2]
     password = sys.argv[3]
     db_env_name = sys.argv[4]
     db_password = sys.argv[5]
+    site_name = sys.argv[6]
 
     print("\n1. Signing in as " + username)
-    auth_token, site_id, user_id = sign_in(server, username, password, "TRINET")
+    auth_token, site_id, user_id = sign_in(server, username, password, site_name)
 
     print("\n2. Finding and updating all the datasources for the site")
     get_datasources(server, auth_token, site_id, db_env_name, db_password)
